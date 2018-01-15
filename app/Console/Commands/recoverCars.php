@@ -41,11 +41,15 @@ class recoverCars extends Command
         $dailyCheck = base_path('assets/dailyCheck.xlsx');
         $chassisNo = base_path('assets/chassisNo.xlsx');
         $exportFile = fopen(base_path('assets/recover_deleted_cars_'.date('Ymd').'.sql'), 'w+');
-        $data = \Excel::load($dailyCheck, function ($reader) {
-        }, 'UTF-8')->get();
+        try {
+            $data = \Excel::load($dailyCheck, function ($reader) {
+            }, 'UTF-8')->get();
 
-        $chassis = \Excel::load($chassisNo, function ($reader) {
-        }, 'UTF-8')->get();
+            $chassis = \Excel::load($chassisNo, function ($reader) {
+            }, 'UTF-8')->get();
+        } catch(Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
 
         if(empty($chassis) || !$chassis->count()){
             echo "Error: ChassisNo file is empty";
