@@ -62,7 +62,7 @@ class recoverCars extends Command
             foreach ($data as $key => $value2) {
                 if((string)$value1->車台番号 === (string)$value2->車台番号) {
                     $total++;
-                    fwrite($exportFile, "UPDATE shop_cars SET delete_flg=0 WHERE id='$value2->id';\n");
+                    fwrite($exportFile, "UPDATE shop_cars SET delete_flg=0 WHERE id=$value2->id;\n");
                     var_dump($value2->id);
                 };
             }
