@@ -62,17 +62,29 @@ class recoverCars extends Command
         }
 
         $total = 0;
-        foreach ($chassis as $key => $value1) {
-            foreach ($data as $key => $value2) {
-                if((string)$value1->車台番号 === (string)$value2->車台番号) {
+        $nonRestore = [];
+        foreach ($data as $key1 => $value1) {
+            foreach ($chassis as $key2 => $value2) {
+                if((string)$value2->車台番号 === (string)$value1->車台番号) {
                     $total++;
-                    fwrite($exportFile, "UPDATE shop_cars SET delete_flg=0 WHERE id=$value2->id;\n");
-                    var_dump($value2->id);
-                };
+                    fwrite($exportFile, "UPDATE shop_cars SET delete_flg=0 WHERE id=$value1->id;\n");
+                    var_dump($value1->id);
+                    break;
+                } else {
+                    if(($key2 === count($chassis) - 1) && !array_key_exists((integer)$value1->id, $nonRestore)) {
+                        $nonRestore[$value1->id] = $value1->車台番号;
+                    }
+                }
             }
         }
 
-        fwrite($exportFile, "-- Total: $total");
+        fwrite($exportFile, "-- Total cars need restore: $total\n");
+        fwrite($exportFile, "------------------------------------\n");
+        fwrite($exportFile, "-- Cars don't need restore --\n");
+        foreach($nonRestore as $key => $value) {
+            fwrite($exportFile, "    -- id = $key, bbno = $value\n");
+        }
+        fwrite($exportFile, "-- Total cars don't need restore: " . count($nonRestore) . "\n");
         fclose($exportFile);
     }
 }
