@@ -78,13 +78,13 @@ class recoverCars extends Command
             }
         }
 
-        fwrite($exportFile, "-- Total cars need restore: $total\n");
+        fwrite($exportFile, "-- Total cars need restoring: $total\n");
         fwrite($exportFile, "------------------------------------\n");
-        fwrite($exportFile, "-- Cars don't need restore --\n");
+        fwrite($exportFile, "-- Cars don't need restoring --\n");
         foreach($nonRestore as $key => $value) {
             fwrite($exportFile, "    -- id = $key, bbno = $value\n");
         }
-        fwrite($exportFile, "-- Total cars don't need restore: " . count($nonRestore) . "\n");
+        fwrite($exportFile, "-- Total cars don't need restoring: " . count($nonRestore) . "\n");
         fclose($exportFile);
     }
 }
